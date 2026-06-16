@@ -1,4 +1,8 @@
-一个远程托管平台,存放你的版本控制系统及其包含的文件.
+[[../概念解释#GitHub|概念解释]]
+# 注册
+可能需要魔法
+- 填写邮箱,按照指导注册(中间绿色按钮)
+![](https://cdn.jsdelivr.net/gh/CurseDEMO/image-bed@main/img/20260616173327830.png)
 # 如何创建远程仓库
 1. 进入[GitHub主页](https://github.com/)并登录
 2. 单击绿色按钮New创建仓库
