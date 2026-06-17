@@ -1,5 +1,7 @@
-下载地址[Releases · mihomo-party-org/clash-party](https://github.com/mihomo-party-org/clash-party/releases)
-[机场](https://inv.dginv.click/#/register?code=clfreIvj)或从群文件获取
+下载地址[Releases · mihomo-party-org/clash-party](https://github.com/mihomo-party-org/clash-party/releases)或从群文件获取
+[机场](https://inv.dginv.click/#/register?code=clfreIvj)
+# 概念解释
+[[../概念解释#代理软件|代理软件, 魔法, 机场]]
 # 使用教程
 > [!Caution] 不稳定警告(必读)
 > ##### 晚高峰网络卡顿/不稳定说明
