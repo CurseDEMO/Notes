@@ -1,6 +1,6 @@
 [[../概念解释#Git|概念解释]]
 # 安装
-1. 先[[安装VSCode]]
+1. 先[[../Visual Studio Code/VSCode基本安装与配置|安装VSCode]]
 2. 打开Git安装程序,无脑下一步,注意在选择编辑器界面选择VSCode(下拉菜单选择,==必须先安装VSCode==,否则无法安装Git)之后无脑下一步.
 ![](https://cdn.jsdelivr.net/gh/CurseDEMO/image-bed@main/img/Pasted%20image%2020260615133432.png)
 # 小白使用
