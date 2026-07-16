@@ -17,7 +17,6 @@ git config --global user.email
 johndoe@example.com
 ```
 - 邮箱选用你在注册Github时的邮箱
-```
 #### 自行初始化
 - 你需要在[[../概念解释#命令行#命令行程序|命令行]]使用[[#命令行#基本操作#cd|cd]]命令以cd到你想要初始化的目录
 - 输入并回车执行`git init`即可,该目录就会成为你的本地仓库
