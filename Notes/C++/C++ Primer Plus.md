@@ -92,7 +92,7 @@ type functionname(agruments)
 ## 命名约定
 ![](https://cdn.jsdelivr.net/gh/CurseDEMO/image-bed/image/20260728162158637.png)
 # 数据
-## 变量
+## 变量与基础数据类型
 ### 标识符
 - 字母+数字+下划线_
 - 不能以数字开头
@@ -181,3 +181,37 @@ type functionname(agruments)
 - 类型转换
 	- 由小位到大位可以自然进行, 安全的. 反之, 转换后结果不确定或者变得奇怪.
 	- 强制转换: `static_cast<typeName>(value)` 返回一个转换后的值.
+## 更复杂的复合类型
+### 数组
+`typeName arrayName[arraySize]`
+- typeName存储元素的类型
+- arrayName数组名
+- arraySize元素个数, 必须是整数常量或const值而不是变量
+- 务必给至少一个元素赋值,例如`typeName arrayName[arraySize] {1, 2, 3,...};`将每一个元素赋值为一些数字
+- 数组只能初始化一次, 不能将一个数组赋值给另外一个数组
+- 若初始化时提供的值少于数组长度, 则其他元素均设为0. 若你想将这个初始化为0, 那么你可以`typeName arrayName[arraySize]{}`
+#### 索引
+- 从零开始
+- `arrayName[index]`, 务必不要越界
+### 字符串(传统)
+- 第一种是char数组, 以`'\0'` 结尾.
+- 第二种是字符串常量/字符串字面值 ( 注意与字符常量的单引号做区分 ). 它也是char数组, 但形如`char str[]{"string"};
+#### 拼接
+- 任何由两个空白 (空格, 制表符, 换行符) 分割的字符串常量都将自动化拼接成一个
+- `sizeof(array)`会指出数组的长度 (以byte为单位). 而来自头文件cstring的`strlen(stringInArray)`会指出字符串中可见字符长度
+- 截取字符串可以将中间一个字符设置成`\0`即可, 因为数组字符串只会读取到`\0`为止, 其余后面的会被忽略.
+![444](https://cdn.jsdelivr.net/gh/CurseDEMO/image-bed/image/20260802104625369.png)
+#### 读取输入
+- cin其中一个缺陷是如果输入结果包含空白, 则只会读取前半部分.
+- 故可使用`cin.getline(array, length)`成员函数读取整行, array是指你要存入的数组名字, length是最多可读取的字符串长度. 但只能读取length-1个字符, 因为最后一个字符必须添加`'\0'`.
+- 其实你可以这样写以读取两次: `cin.getline(name1, length1).getline(name2, length2)`
+- ![](https://cdn.jsdelivr.net/gh/CurseDEMO/image-bed/image/20260802104706449.png)
+- 还有一种叫做`cin.get(array, length)`与上面的区别是不再读取并不再丢弃换行符. 因此引申出一个问题: 连续两次调用`cin.get(array, length)`会产生第二个cin读取不到的问题, 具体大家可以试试. 因此更好的是在第一个那里使用`cin.get(array, length).get()` 
+### 字符串string类
+- 先包含头文件string.
+- 还要`using std::string`. string类使得我们不需要使用数组处理, 可以当做普通变量 `string str{"string"}`.
+- 索引和数组一致
+- 不过它可以自动处理string的大小, 而且还能用+, +=来拼接字符串.
+- string成员函数`size()`可以确定字符串字符数, 用法是`stringName.size()`返回长度.
+- ![](https://cdn.jsdelivr.net/gh/CurseDEMO/image-bed/image/20260802113101211.png)
+- ![](https://cdn.jsdelivr.net/gh/CurseDEMO/image-bed/image/20260802113205241.png)
