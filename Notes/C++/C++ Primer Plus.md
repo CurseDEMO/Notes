@@ -193,16 +193,16 @@ type functionname(agruments)
 #### 索引
 - 从零开始
 - `arrayName[index]`, 务必不要越界
-### 字符串(传统)
+### 字符串(C-风格)
 - 第一种是char数组, 以`'\0'` 结尾.
 - 第二种是字符串常量/字符串字面值 ( 注意与字符常量的单引号做区分 ). 它也是char数组, 但形如`char str[]{"string"};
 #### 拼接
 - 任何由两个空白 (空格, 制表符, 换行符) 分割的字符串常量都将自动化拼接成一个
-- `sizeof(array)`会指出数组的长度 (以byte为单位). 而来自头文件cstring的`strlen(stringInArray)`会指出字符串中可见字符长度
+- `sizeof(array)`会指出数组的长度 (以byte为单位). 而来自头文件cstring的`strlen(stringInArray)`会指出字符串中可见字符长度, `strncpy(positionName, source, maxLength)`或`strcpy(positionName, source)`用于复制字符串. `strcat(char1, char2);`会把2接到1后面
 - 截取字符串可以将中间一个字符设置成`\0`即可, 因为数组字符串只会读取到`\0`为止, 其余后面的会被忽略.
 ![444](https://cdn.jsdelivr.net/gh/CurseDEMO/image-bed/image/20260802104625369.png)
 #### 读取输入
-- cin其中一个缺陷是如果输入结果包含空白, 则只会读取前半部分.
+- cin其中一个缺陷是如果输入结果包含空白, 则只会读取前半部分. 剩下的要么被丢掉, 要么被下一个cin读取
 - 故可使用`cin.getline(array, length)`成员函数读取整行, array是指你要存入的数组名字, length是最多可读取的字符串长度. 但只能读取length-1个字符, 因为最后一个字符必须添加`'\0'`.
 - 其实你可以这样写以读取两次: `cin.getline(name1, length1).getline(name2, length2)`
 - ![](https://cdn.jsdelivr.net/gh/CurseDEMO/image-bed/image/20260802104706449.png)
@@ -213,5 +213,337 @@ type functionname(agruments)
 - 索引和数组一致
 - 不过它可以自动处理string的大小, 而且还能用+, +=来拼接字符串.
 - string成员函数`size()`可以确定字符串字符数, 用法是`stringName.size()`返回长度.
+- 输入: `getline(cin, stringName)` 
 - ![](https://cdn.jsdelivr.net/gh/CurseDEMO/image-bed/image/20260802113101211.png)
 - ![](https://cdn.jsdelivr.net/gh/CurseDEMO/image-bed/image/20260802113205241.png)
+### 结构, 共用体, 枚举
+```cpp
+// 放在main外部, 这是结构定义, 结构可以包含不同的类型
+struct structName
+{
+	typeName varName{};
+	...
+} name3{}, name4{}; // 同时初始化structName结构name3, name4
+
+// 创建变量访问属性
+structName name1{var, ...};
+name1.varName;   // varName成员
+
+structName name2{var, ...};
+name2 = name1; // 成员赋值有效
+
+// 结构数组
+structName arrayName[20]{{}}; // 初始化包含20个类型为structName的结构
+
+// 这是共用体, 它可以存储多种类型但只能同时存储一种类型, 如果省略unionName则成为匿名共用体
+union unionName
+{
+	typeName varName;
+};
+
+// 可以代替const的新方法
+// enum, 即枚举
+// 创建枚举
+enum spectrum {a, b, c, ...}; // a, b ,c默认值为0, 1, 2. 这三个称为枚举量, 枚举量必须是整型
+spectrum band; // 声明枚举变量
+band = a; // band只能接受spectrum中定义的a, b, c...
+// 当然你也可以指定值, 比如把a改成a = 10; 那么紧跟其后的未初始化的b自动加1, 变成11, c是12. 当然你也可以指定b,c的值
+```
+### 指针
+- `&`运算符可以指出变量在内存的位置.
+- 例如`&home`就是home的地址. 指针就是这样的值
+- `*`运算符可以是间接值或解除引用运算符, 如对于指针使用`*`即可获取该地址的值
+```cpp
+// 声明指针
+int mai{6};
+int* maiP;
+maiP = &mai; // 此时maiP指针指向mai的, 也就是6的地址
+// 此时maiP和&mai一样,都是6的地址, *maiP和mai一样,都是6
+// 为一个数据对象获得并指定分配内存
+typeName * pointerName = new typeName;
+// 释放内存(仅用于空指针和new创建的指针)
+delete pointerName;
+// 创建动态数组
+int* psome = new int [10];
+typeName* pointerName = new typeName[elementNum];
+// 释放动态数组
+delete [] psome;
+delete [] pointerName;
+// 访问动态数组, 指针可以作为数组名
+psome[0];
+psome[1];
+// 创建动态结构
+struct inflatable // 定义结构
+{
+	int price;
+};
+
+inflatable * ps = new inflatable // ps是指针
+ps->price = 20; // 访问price并赋值20
+(*ps).price = 20; // 和上一句等效
+// 综合运用
+inflatable s1, s2, s3;
+// 指向结构s1的指针
+inflatable* pa{&s1};
+pa->price = 2; // 和s1.price = 2; 一致
+(pa + 1) -> price = 3; // 和s2.price = 3; 一致
+// 结构数组
+inflatable arrS[3];
+arrS[0].price = 2;
+// 结构指针数组
+inflatable* arrP[3]{&s1, &s2, &s3};
+arrP[0]->price = 2; // 和*arrP[0].price = 2; 一致
+// 结构指针数组的指针
+inflatable** ppa = arrP; // 和auto ppa = arrP; 一致
+(*ppa)->price = 2; // 和arrP -> price = 2; 一致
+
+// 动态数组的替代品模板类vector, 模板类array
+// 引入头文件vector, array, using std::vector, using std::array
+vector<typeName> vt(size); // 标准格式
+array<typeName, size> arr; // 这里的size是常量
+```
+
+
+> [!Warning] 指针的危险
+> 一定要在对指针使用解除引用运算符 **\*** 之前将指针初始化为一个确定的适当的地址.
+
+# 循环, 分支, 关系表达式, 逻辑运算符
+```cpp
+for (initialization1, init2, ...; testExpression; updateExpression1, uE2, ...)
+{	
+	statement
+	...
+}
+for (typeName x : object)
+{
+	statement
+	...
+}
+// 加入&以修改object内容
+for (typeName &x : object)
+{
+	statement
+	...
+}
+// i++ 表达式使用i原先的值, 再加1. ++i i先加1, 表达式使用i加1后的值. 后者效率更高
+// 逗号运算符,  可以将多个语句合并为一个语句
+// 引入头文件cstring, 使用strcmp(element1, element2)可以比较两个C-风格字符串, 相同返回0 反之非0
+// 当至少有一方是string, 你可以用关系运算符直接比较二者而不是strcmp()
+while (testExpression)
+{
+	statement
+	...
+}
+// 实现延迟循环: 头文件ctime提供了类型clock_t,常量CLOCK_PER_SEC和clock()函数, clock()函数可以获取程序开始后所用时间, 单位为刻, CLOCK_PER_SEC可以和秒相乘获得刻, 刻最好用clock_t存储
+// 创建别名 
+typedef typeName aliasName; // aliasName为别名
+
+do
+{
+	statement
+	...
+} while (testExpression);
+// EOF检测
+// 
+cin.fail(); // 判断是否到达EOF, 到达返回true
+
+// if语句
+if (testCondition)
+{
+	statement
+	...
+}
+else
+{
+	if (testCondition)
+	{
+		...
+	}
+	else
+	{
+		...
+	}
+}
+// 与: && 或: || 非: !
+// 库cctype
+isalpha(char); // 判断字符是否为字母
+isdigits(char); // 判断字符是否为数字
+isspace(char); // 判断字符是否为空白
+ispunct(char); // 判断字符是否为标点符号
+```
+![](https://cdn.jsdelivr.net/gh/CurseDEMO/image-bed/20260815172301527.png)
+```cpp
+expression1 ? expression2 : expression3; // 若第一个为true, 则返回第二个, 反之为第三个
+// switch语句
+switch (intExpression)
+{
+	case label1 : statements
+	case label2 : statements
+	...
+	default     : statements
+}
+// break continue 同Python
+// cin特性
+cin.clear() // 重置错误输入标记
+```
+![](https://cdn.jsdelivr.net/gh/CurseDEMO/image-bed/20260815173949466.png)
+```cpp
+// fstream头文件处理文本文件输入输出
+#include<fstream>
+#include<ctsdlib>
+using std::ofstream;
+ofstream file; // 创建ofstream对象file, 准备写入文件
+file.open("test.txt"); // 打开text.txt文件
+file << "123" // 向文件写入123
+
+using std::ifstream;
+char wt;
+ifstream file; //创建对象file, 准备读取文件
+file.open("test.txt"); // 打开text.txt文件
+file.is_open(); // 检查文件是否成功打开, 若成功返回true
+file >> wt; // 将文件内容写入wt
+
+exit(EXIT_FALIURE); // 来自cstdlib, 终止程序
+
+file.eof(); // 最后一次读取操作读取到EOF返回true
+file.fail(); // 最后一次读取操作类型不匹配返回true
+file.bad(); // 最后一次读取操作遇到其他非法原因, 返回true
+file.good(); // 最后一次读取操作完全正确且不到EOF, 返回true
+```
+## 拓展
+`cout.setf()` 和 `cout.precision()` 是 C++ `<iostream>` 中用于**控制输出格式**的两个核心成员函数。它们分别负责“开关标志位”和“精度/位数设置”。
+
+---
+
+### 1. `cout.precision(n)` — 控制数值精度
+
+#### 作用
+
+设置浮点数输出的**有效数字位数**或**小数点后位数**（取决于当前是否设置了 `fixed` / `scientific` 标志）。
+
+#### 两种模式
+
+|当前格式标志|`precision(n)` 的含义|示例 (`n=3`)|
+|:--|:--|:--|
+|**默认** (无 fixed/scientific)|**总有效数字**为 n 位|`3.14159` → `3.14`|
+|`fixed` 或 `scientific`|**小数点后**保留 n 位|`3.14159` → `3.142`|
+
+#### 用法
+
+```cpp
+#include <iostream>
+using namespace std;
+
+double pi = 3.14159265;
+
+// 默认模式：3位有效数字
+cout.precision(3);
+cout << pi << endl;          // 输出: 3.14
+
+// fixed模式：小数点后3位
+cout.setf(ios::fixed);
+cout.precision(3);
+cout << pi << endl;          // 输出: 3.142
+
+// scientific模式：小数点后3位 + 科学计数法
+cout.setf(ios::scientific);
+cout.precision(3);
+cout << pi << endl;          // 输出: 3.142e+00
+```
+
+> ⚠️ **注意**：`precision()` 的设置是**持久的**，一旦设置，后续所有输出都生效，直到再次修改。它返回之前的精度值，可用于保存/恢复：
+> 
+> ```cpp
+> streamsize old = cout.precision(4); // 设为4，保存旧值
+> // ... 输出 ...
+> cout.precision(old);                // 恢复
+> ```
+
+---
+
+### 2. `cout.setf(flags)` / `cout.setf(flags, mask)` — 设置格式标志位
+
+#### 作用
+
+通过位掩码（bitmask）开启/关闭特定的格式化选项。
+
+#### 常用标志位
+
+|标志|作用|等价操纵符|
+|:--|:--|:--|
+|`ios::fixed`|定点表示法（小数点后固定位数）|`std::fixed`|
+|`ios::scientific`|科学计数法|`std::scientific`|
+|`ios::showpoint`|始终显示小数点和尾随零|`std::showpoint`|
+|`ios::showpos`|正数前显示 `+`|`std::showpos`|
+|`ios::uppercase`|十六进制/科学计数法用大写字母|`std::uppercase`|
+|`ios::left`|左对齐|`std::left`|
+|`ios::right`|右对齐（默认）|`std::right`|
+|`ios::internal`|符号左对齐，数值右对齐|`std::internal`|
+|`ios::hex` / `oct` / `dec`|十六进制/八进制/十进制|`std::hex` 等|
+|`ios::boolalpha`|bool 输出 true/false 而非 1/0|`std::boolalpha`|
+
+#### 两种重载形式
+
+```cpp
+// 形式1：直接设置（仅开启，不影响其他无关位）
+cout.setf(ios::fixed);
+cout.setf(ios::showpoint);
+
+// 形式2：先清除mask对应的位，再设置flags（安全切换互斥选项）
+// 例如切换进制时，必须先清除旧的进制标志
+cout.setf(ios::hex, ios::basefield);   // basefield = hex|oct|dec
+cout.setf(ios::scientific, ios::floatfield); // floatfield = fixed|scientific
+```
+
+> ⚠️ **关键陷阱**：`fixed` 和 `scientific` 属于同一组互斥标志（`floatfield`）。如果只用形式1同时设置了两者，行为未定义。**必须用形式2**：
+> 
+> ```cpp
+> // ✅ 正确切换到 fixed
+> cout.setf(ios::fixed, ios::floatfield);
+> 
+> // ❌ 危险：可能两个标志同时被置位
+> cout.setf(ios::fixed);
+> cout.setf(ios::scientific); // 未清除 fixed！
+> ```
+
+#### 取消标志
+
+```cpp
+cout.unsetf(ios::showpoint);       // 关闭单个标志
+cout.setf(0, ios::floatfield);     // 清除整个浮点格式组，回到默认
+```
+
+---
+
+### 3. 现代 C++ 推荐：用操纵符替代
+
+`setf()` 和 `precision()` 虽然功能完整，但代码冗长且易出错。C++ 提供了 `<iomanip>` 中的**流操纵符（manipulators）**，效果完全等价且更安全可读：
+
+|setf / precision 写法|等价操纵符写法|
+|:--|:--|
+|`cout.setf(ios::fixed, ios::floatfield)`|`cout << fixed`|
+|`cout.setf(ios::scientific, ios::floatfield)`|`cout << scientific`|
+|`cout.precision(3)`|`cout << setprecision(3)`|
+|`cout.setf(ios::showpoint)`|`cout << showpoint`|
+|`cout.setf(ios::left)`|`cout << left`|
+|`cout.setf(ios::hex, ios::basefield)`|`cout << hex`|
+
+```cpp
+#include <iomanip>
+
+// 一行搞定，清晰安全
+cout << fixed << setprecision(2) << showpos << 3.14159 << endl;
+// 输出: +3.14
+```
+
+### 4. 总结对比
+
+|维度|`precision(n)`|`setf(flags)`|
+|:--|:--|:--|
+|**控制对象**|数值精度/小数位数|格式开关（对齐、进制、浮点表示法等）|
+|**参数类型**|`streamsize` (整数)|`fmtflags` (位掩码)|
+|**持久性**|✅ 持久生效|✅ 持久生效|
+|**返回值**|旧精度值|旧标志状态|
+|**现代替代**|`setprecision(n)`|`fixed`, `scientific`, `hex` 等|
+
+> 💡 **建议**：除非在编写底层格式化库或需要动态/条件化设置格式，否则**优先使用 `<iomanip>` 操纵符**。理解 `setf/precision` 的原理有助于调试格式问题和阅读旧代码。
